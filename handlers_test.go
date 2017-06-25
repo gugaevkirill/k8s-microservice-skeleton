@@ -2,6 +2,7 @@ package main
 
 import (
 	"testing"
+	"github.com/julienschmidt/httprouter"
 	"net/http/httptest"
 	"net/http"
 	"io/ioutil"
@@ -12,7 +13,10 @@ import (
 
 // Check base (/) URL
 func TestHandler(t *testing.T) {
-	ts := httptest.NewServer(http.HandlerFunc(mainpage))
+	router := httprouter.New()
+	router.GET("/", mainpage)
+
+	ts := httptest.NewServer(router)
 	defer ts.Close()
 
 	res, err := http.Get(ts.URL + "/")
